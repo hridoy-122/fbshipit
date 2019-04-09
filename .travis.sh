@@ -2,6 +2,10 @@
 set -ex
 
 add-apt-repository ppa:git-core/ppa
+UBUNTU_VERSION=$(lsb_release -r -s)
+if (( $(echo "$UBUNTU_VERSION < 18.0" | bc -l) )); then
+  add-apt-repository ppa:mercurial-ppa/releases
+fi
 apt-get update
 apt-get install -y \
   git \

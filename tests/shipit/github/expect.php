@@ -27,11 +27,15 @@ class ShimExpectObj<T> extends Facebook\FBExpect\ExpectObj<T> {
   }
 
   public function toMatchRegex(string $expected, string $msg = '', ...): void {
+    /* HH_IGNORE_ERROR[2049] __PHPStdLib */
+    /* HH_IGNORE_ERROR[4107] __PHPStdLib */
     $msg = \vsprintf($msg, \array_slice(\func_get_args(), 2));
     $this->assertRegExp($expected, (string) $this->varShim, $msg);
   }
 
   public function toNotMatchRegex(string $expected, string $msg = '', ...): void {
+    /* HH_IGNORE_ERROR[2049] __PHPStdLib */
+    /* HH_IGNORE_ERROR[4107] __PHPStdLib */
     $msg = \vsprintf($msg, \array_slice(\func_get_args(), 2));
     $this->assertNotRegExp($expected, (string) $this->varShim, $msg);
   }
