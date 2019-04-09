@@ -2,7 +2,6 @@
 set -ex
 
 add-apt-repository ppa:git-core/ppa
-add-apt-repository ppa:mercurial-ppa/releases
 apt-get update
 apt-get install -y \
   git \
