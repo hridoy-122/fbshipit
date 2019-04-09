@@ -3,7 +3,7 @@ set -ex
 
 add-apt-repository ppa:git-core/ppa
 UBUNTU_VERSION=$(lsb_release -r -s)
-if (( $(echo "$UBUNTU_VERSION < 18.0" | bc -l) )); then
+if [ ${UBUNTU_VERSION:0:2} -lt "18" ]; then
   add-apt-repository ppa:mercurial-ppa/releases
 fi
 apt-get update
