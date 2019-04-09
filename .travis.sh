@@ -2,8 +2,9 @@
 set -ex
 
 add-apt-repository ppa:git-core/ppa
+# Must use a newer hg version than default on Xenial and lower
 UBUNTU_VERSION=$(lsb_release -r -s)
-if [ ${UBUNTU_VERSION:0:2} -lt "18" ]; then
+if [ $(echo $UBUNTU_VERSION | cut -c1-2) -lt "18" ]; then
   add-apt-repository ppa:mercurial-ppa/releases
 fi
 apt-get update
