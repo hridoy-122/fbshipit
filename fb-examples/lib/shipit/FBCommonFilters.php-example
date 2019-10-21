@@ -245,7 +245,11 @@ final class FBCommonFilters {
     // `-b`, so this is just maintaining that behavior since they sometimes
     // contain codenames.
     return $changeset->withSubject(
-      Regex\replace($changeset->getSubject(), re"/^(?:\[[^\]]+\]\s*)+/", ''),
+      Regex\replace(
+        $changeset->getSubject(),
+        re"/^(?:\[[^\]]+\]\s*)*(Back out \"|Revert \"|Revert D\d+: )?(?:\[[^\]]+\]\s*)+/i",
+        '$1',
+      ),
     );
   }
 
