@@ -160,7 +160,7 @@ abstract class ShipItUtil {
 
   public static function matchesAnyPattern(
     string $path,
-    vec<string> $patterns,
+    Container<string> $patterns,
   ): ?string {
     foreach ($patterns as $pattern) {
       /* HH_IGNORE_ERROR[2049] __PHPStdLib */

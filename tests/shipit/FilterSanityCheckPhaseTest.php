@@ -86,4 +86,17 @@ final class FilterSanityCheckPhaseTest extends BaseTest {
       // @oss-disable: ->toThrow(\InvariantViolationException::class);
     ->toThrow(InvariantException::class); // @oss-enable
   }
+
+  public function testAllowsForStrippedPaths(): void {
+    $phase = new ShipItFilterSanityCheckPhase(
+      $changeset ==> $changeset->withDiffs(
+        Vec\filter(
+          $changeset->getDiffs(),
+          $diff ==> Str\slice($diff['path'], 0, 4) === 'foo/',
+        ),
+      ),
+      vec['@bar@'],
+    );
+    $phase->assertValid(keyset['foo/', 'bar/']);
+  }
 }

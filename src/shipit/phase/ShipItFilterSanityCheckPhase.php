@@ -19,6 +19,7 @@ final class ShipItFilterSanityCheckPhase extends ShipItPhase {
 
   public function __construct(
     private (function(ShipItChangeset): ShipItChangeset) $filter,
+    private Container<string> $strippedFiles = vec[],
   ) {}
 
   <<__Override>>
@@ -60,7 +61,12 @@ final class ShipItFilterSanityCheckPhase extends ShipItPhase {
         ]);
       $changeset = $filter($changeset);
       if (C\count($changeset->getDiffs()) !== 1) {
-        invariant_violation(
+        $test_file_is_stripped = ShipItUtil::matchesAnyPattern(
+          $test_file,
+          $this->strippedFiles,
+        );
+        invariant(
+          $test_file_is_stripped !== null,
           "Source root '%s' specified, but is removed by filter; debug: %s\n",
           $root,
           \var_export($changeset->getDebugMessages(), /* return = */ true),

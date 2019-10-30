@@ -282,6 +282,7 @@ abstract class FBShipItConfig {
     return vec[
       new ShipItFilterSanityCheckPhase(
         $changeset ==> $this->filterChangeset($changeset, $branch_config),
+        $this->getDefaultStrippedFiles(),
       ),
       new ShipItSaveConfigPhase(
         $static_config['githubOrg'],
