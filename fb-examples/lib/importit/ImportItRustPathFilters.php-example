@@ -25,7 +25,8 @@ abstract final class ImportItRustPathFilters {
     dict<string, string> $shipit_mapping,
     (function(dict<string, string>): dict<string, string>) $inner_fold,
   ): dict<string, string> {
-    unset($shipit_mapping['self::RUST_OSS_CONFIGS']);
+    $oss_configs_destination = $shipit_mapping[self::RUST_OSS_CONFIGS];
+    unset($shipit_mapping[self::RUST_OSS_CONFIGS]);
 
     $mapping = ($inner_fold)($shipit_mapping);
 
@@ -34,7 +35,8 @@ abstract final class ImportItRustPathFilters {
     // the beginning of a map in PHP/Hack, so create a new map.
     $rust_mapping = dict[];
     foreach (self::$ossConfigFiles as $filename) {
-      $rust_mapping[$filename] = self::RUST_OSS_CONFIGS.$filename;
+      $rust_mapping[$oss_configs_destination.$filename] =
+        self::RUST_OSS_CONFIGS.$filename;
     }
     return Dict\merge($rust_mapping, $mapping);
   }
@@ -48,7 +50,10 @@ abstract final class ImportItRustPathFilters {
     dict<string, string> $shipit_mapping,
     vec<string> $skip_patterns = vec[],
   ): \Facebook\ShipIt\ShipItChangeset {
-    $rust_mapping = self::invertShipItFold($shipit_mapping, $x ==> ImportItPathFilters::invertShipIt($x));
+    $rust_mapping = self::invertShipItFold(
+      $shipit_mapping,
+      $x ==> ImportItPathFilters::invertShipIt($x),
+    );
 
     return \Facebook\ShipIt\ShipItPathFilters::moveDirectories(
       $changeset,
