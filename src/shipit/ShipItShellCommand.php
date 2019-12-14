@@ -25,10 +25,7 @@ final class ShipItShellCommand {
   private int $retries = 0;
   private ?self::TFailureHandler $failureHandler = null;
 
-  public function __construct(
-    private ?string $path,
-    string ...$command
-  ) {
+  public function __construct(private ?string $path, string ...$command) {
     $this->command = vec($command);
   }
 
@@ -86,9 +83,7 @@ final class ShipItShellCommand {
       try {
         $result = $this->runOnceSynchronously();
         // Handle case when $this->throwForNonZeroExit === false
-        /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-        /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-        if ($result->getExitCode() !== 0 && \posix_get_last_error() !== 4 /* EINTR */) {
+        if ($result->getExitCode() !== 0) {
           throw new ShipItShellCommandException(
             $this->getCommandAsString(),
             $result,
@@ -172,13 +167,21 @@ final class ShipItShellCommand {
     while (true) {
       $ready_streams = vec[$stdout_stream, $stderr_stream];
       $null_byref = null;
-      /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-      /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-      $result = \stream_select(
-        inout $ready_streams,
-        /* write streams = */ inout $null_byref,
-        /* exception streams = */ inout $null_byref,
-        /* timeout = */ null,
+      do {
+        /* HH_IGNORE_ERROR[2049] __PHPStdLib */
+        /* HH_IGNORE_ERROR[4107] __PHPStdLib */
+        $result = \stream_select(
+          inout $ready_streams,
+          /* write streams = */ inout $null_byref,
+          /* exception streams = */ inout $null_byref,
+          /* timeout = */ null,
+        );
+      } while (
+        $result === false &&
+        /* This **MUST NOT** be a PHP\ wrapper because `errno` is extremely volatile */
+        /* HH_IGNORE_ERROR[2049] __PHPStdLib */
+        /* HH_IGNORE_ERROR[4107] __PHPStdLib */
+        \posix_get_last_error() === 4 // \HH\Lib\OS\__Private\Errno::EINTR
       );
       if ($result === false) {
         break;
