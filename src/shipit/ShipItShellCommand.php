@@ -86,7 +86,9 @@ final class ShipItShellCommand {
       try {
         $result = $this->runOnceSynchronously();
         // Handle case when $this->throwForNonZeroExit === false
-        if ($result->getExitCode() !== 0) {
+        /* HH_IGNORE_ERROR[2049] __PHPStdLib */
+        /* HH_IGNORE_ERROR[4107] __PHPStdLib */
+        if ($result->getExitCode() !== 0 && \posix_get_last_error() !== 4 /* EINTR */) {
           throw new ShipItShellCommandException(
             $this->getCommandAsString(),
             $result,
