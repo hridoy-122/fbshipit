@@ -160,7 +160,6 @@ final class FBRepoInitPhase extends ShipItPhase {
           'ssh://projects.git-ro.vip.facebook.com/data/gitrepos/infer',
           'infer-fb',
         ];
-        break;
       case 'buck_internal':
         return vec[
           '/usr/bin/git',
@@ -202,7 +201,6 @@ final class FBRepoInitPhase extends ShipItPhase {
           'ssh://projects.git-ro.vip.facebook.com/data/gitrepos/mysql-5.6.git',
           'mysql-fb',
         ];
-        break;
       case 'si_sigma':
         return vec[
           '/usr/local/bin/hg-clone-si_sigma',
@@ -217,7 +215,6 @@ final class FBRepoInitPhase extends ShipItPhase {
           'ssh://projects.git-ro.vip.facebook.com/data/gitrepos/phabtest1_git.git',
           'phabtest1_git',
         ];
-        break;
       case 'phabtest1_hg':
         return vec[
           '/usr/bin/hg',
@@ -225,7 +222,6 @@ final class FBRepoInitPhase extends ShipItPhase {
           'ssh://hg.vip.facebook.com/data/scm/phabtest1_hg',
           'phabtest1_hg',
         ];
-        break;
       case 'business-sdk':
         return vec[
           '/usr/bin/git',
@@ -233,7 +229,6 @@ final class FBRepoInitPhase extends ShipItPhase {
           'ssh://git.vip.facebook.com/data/gitrepos/business-sdk.git',
           'business-sdk',
         ];
-        break;
       case 'facebook-spaces':
         return vec[
           '/usr/bin/git',
@@ -241,7 +236,6 @@ final class FBRepoInitPhase extends ShipItPhase {
           'ssh://projects.git-ro.vip.facebook.com/data/gitrepos/spaces.git',
           'facebook-spaces',
         ];
-        break;
       case 'fbwin-gameroom':
         return vec[
           '/usr/bin/git',
@@ -263,7 +257,6 @@ final class FBRepoInitPhase extends ShipItPhase {
           'ssh://git.vip.facebook.com/data/gitrepos/whatsapp/biz.git',
           'WABIZ',
         ];
-        break;
     }
     $config = FBRepoCloneCommand::get($name);
     if ($config !== null) {
