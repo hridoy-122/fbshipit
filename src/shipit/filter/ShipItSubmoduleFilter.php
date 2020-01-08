@@ -135,7 +135,7 @@ index %s..0000000
       '(new file mode 160\d+ *\n)?'.
       '(deleted file mode 160\d+ *\n)?'.
       // Header lines
-      'index \w+..\w+ *\n'.
+      'index \w+..\w+( 160\d+)? *\n'.
       '[^\n]+\n[^\n]+\n[^\n]+\n'.
       // One or two submodule lines
       Str\format('%s( *\n%s)?', $subproject_line, $subproject_line).
