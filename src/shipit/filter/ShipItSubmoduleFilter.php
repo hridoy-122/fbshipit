@@ -23,8 +23,8 @@ final class ShipItSubmoduleFilter {
     if ($old_rev === null && $new_rev !== null) {
       ShipItLogger::err("  Adding submodule at '%s'.\n", $path);
       return Str\format(
-        'new file mode 16000
-index 0000000..%s 160000
+        'new file mode 160000
+index 0000000..%s
 --- /dev/null
 +++ b/%s
 @@ -0,0 +1 @@

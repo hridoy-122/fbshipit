@@ -305,7 +305,8 @@ class ShipItRepoGIT
     $submodules = $this->getSubmodules();
     foreach ($submodules as $submodule) {
       // If a submodule has changed, then we need to actually update to the
-      // new version. + before commit hash represents changed submdoule. Make
+      // new version. + before commit hash represents changed submdoule.
+      // - before commit hash represents an uninitialized submodule. Make
       // sure there is no leading whitespace that comes back when we get the
       // status since the first character will tell us whether submodule
       // changed.
@@ -339,6 +340,14 @@ class ShipItRepoGIT
         $this->gitCommand(
           'submodule',
           'update',
+          '--recursive',
+          $submodule['path'],
+        );
+      } else if ($sm_status[0] === '-') {
+        $this->gitCommand(
+          'submodule',
+          'update',
+          '--init',
           '--recursive',
           $submodule['path'],
         );
