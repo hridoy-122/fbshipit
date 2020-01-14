@@ -30,19 +30,21 @@ final class FBCommonFilters {
     shape(
       ?'stripCommonFiles/exceptions' => vec<string>,
       ?'filterMessageSections/keepFields' => keyset<string>,
-    ) $config = shape(),
+      ?'keepTags' => bool,
+    ) $config = shape('keepTags' => false),
   ): ShipItChangeset {
-
-    return $changeset
+    $changeset = $changeset
       |> self::allowEmptyCommit($$)
       |> self::skipIfAlreadyOnGitHub($$)
       |> self::stripCommonFiles(
         $$,
         $config['stripCommonFiles/exceptions'] ?? vec[],
       )
-      |> self::stripSubjectMergePrefix($$)
-      |> self::stripSubjectTags($$)
-      |> self::stripEmptyTestPlans($$)
+      |> self::stripSubjectMergePrefix($$);
+    if (!($config['keepTags'] ?? false)) {
+      $changeset = self::stripSubjectTags($changeset);
+    }
+    return self::stripEmptyTestPlans($changeset)
       |> self::stripCommands($$)
       |> self::stripAccept2Ship($$)
       |> self::referencePullRequestNumber($$)

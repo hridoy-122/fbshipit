@@ -65,6 +65,7 @@ abstract class FBShipItConfig {
             $this->getStripCommonFileExceptions(),
           'filterMessageSections/keepFields' =>
             $this->keepMessageSectionNames(),
+          'keepTags' => $this->keepTags(),
         ),
       )
       |> ShipItPathFilters::stripPaths(
@@ -132,6 +133,13 @@ abstract class FBShipItConfig {
    */
   public function keepMessageSectionNames(): keyset<string> {
     return FBCommonFilters::DEFAULT_MESSAGE_SECTION_NAMES;
+  }
+
+  /**
+   * Whether to keep bracketed [tags] in a diff title prefix.
+   */
+  public function keepTags(): bool {
+    return false;
   }
 
   // Public so that you can add a unit test
