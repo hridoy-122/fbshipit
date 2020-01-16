@@ -33,18 +33,16 @@ final class FBCommonFilters {
       ?'keepTags' => bool,
     ) $config = shape('keepTags' => false),
   ): ShipItChangeset {
-    $changeset = $changeset
+    return $changeset
       |> self::allowEmptyCommit($$)
       |> self::skipIfAlreadyOnGitHub($$)
       |> self::stripCommonFiles(
         $$,
         $config['stripCommonFiles/exceptions'] ?? vec[],
       )
-      |> self::stripSubjectMergePrefix($$);
-    if (!($config['keepTags'] ?? false)) {
-      $changeset = self::stripSubjectTags($changeset);
-    }
-    return self::stripEmptyTestPlans($changeset)
+      |> self::stripSubjectMergePrefix($$)
+      |> self::stripSubjectTags($$, $config['keepTags'] ?? false)
+      |> self::stripEmptyTestPlans($$)
       |> self::stripCommands($$)
       |> self::stripAccept2Ship($$)
       |> self::referencePullRequestNumber($$)
@@ -241,18 +239,33 @@ final class FBCommonFilters {
 
   public static function stripSubjectTags(
     ShipItChangeset $changeset,
+    bool $keep_tags,
   ): ShipItChangeset {
-    // strip tags like [hack] from the front of the subject. historically,
-    // this happened automatically when ShipItRepoGIT called `git am` without
-    // `-b`, so this is just maintaining that behavior since they sometimes
-    // contain codenames.
-    return $changeset->withSubject(
-      Regex\replace(
-        $changeset->getSubject(),
-        re"/^(?:\[[^\]]+\]\s*)*(Back out \"|Revert \"|Revert D\d+: )?(?:\[[^\]]+\]\s*)+/i",
-        '$1',
-      ),
-    );
+    if ($keep_tags) {
+      // keep all tags except for the automated PR import tags
+      if (self::importedFromPullRequest($changeset)) {
+        return $changeset->withSubject(
+          Regex\replace(
+            $changeset->getSubject(),
+            re"/\[[^\]]+\]\s*\[PR\](.*)/",
+            '$1',
+          ),
+        );
+      }
+      return $changeset;
+    } else {
+      // strip tags like [hack] from the front of the subject. historically,
+      // this happened automatically when ShipItRepoGIT called `git am` without
+      // `-b`, so this is just maintaining that behavior since they sometimes
+      // contain codenames.
+      return $changeset->withSubject(
+        Regex\replace(
+          $changeset->getSubject(),
+          re"/^(?:\[[^\]]+\]\s*)*(Back out \"|Revert \"|Revert D\d+: )?(?:\[[^\]]+\]\s*)+/i",
+          '$1',
+        ),
+      );
+    }
   }
 
   public static function stripCommands(
