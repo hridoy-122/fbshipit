@@ -94,7 +94,6 @@ final class ShipItShellCommand {
         --$tries_remaining;
         continue;
       }
-      invariant_violation('Unreachable');
     }
     return $this->runOnceSynchronously();
   }
