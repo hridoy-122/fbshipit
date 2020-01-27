@@ -74,6 +74,7 @@ final class FBShipItPublicizeSyncScriptsPhase extends ShipItPhase {
       /* HH_IGNORE_ERROR[4107] __PHPStdLib */
       $files = Keyset\union($files, \glob($export_root.$glob));
     }
+    /* HH_FIXME[4323] Exposed by typing path builtins */
     $files = Keyset\map($files, $file ==> \realpath($file));
 
     foreach ($files as $file) {
