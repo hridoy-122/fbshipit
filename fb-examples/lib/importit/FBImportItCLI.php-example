@@ -32,7 +32,6 @@ use type Facebook\ShipIt\{
  * If you need more flexibility than this provides, use the classes
  * directly (eg tagit_buck.php)
  */
-<<__Deprecated>>
 abstract class FBImportItCLI
   implements
     IHasFBShipItCLIStaticConfig,
