@@ -28,13 +28,17 @@ class ShipItRepoException extends \Exception {
  * For agnostic communication with git, hg, etc...
  */
 abstract class ShipItRepo {
-  private ShipItScopedFlock $lock;
+  private IShipItLock $lock;
 
   /**
    * @param $path the path to the repository
    */
   public function __construct(protected string $path, string $branch) {
-    $this->lock = self::createSharedLockForPath($path);
+    if (self::useRepositoryLock()) {
+      $this->lock = self::createSharedLockForPath($path);
+    } else {
+      $this->lock = new ShipItDummyLock();
+    }
     $this->setBranch($branch);
   }
 
@@ -43,7 +47,24 @@ abstract class ShipItRepo {
    */
   public abstract function getHeadChangeset(): ?ShipItChangeset;
 
-  protected function getSharedLock(): ShipItScopedFlock {
+  <<__Memoize>>
+  private static function useRepositoryLock(): bool {
+    /* HH_IGNORE_ERROR[2049] __PHPStdLib */
+    /* HH_IGNORE_ERROR[4107] __PHPStdLib */
+    $env = \getenv('NO_REPO_LOCK');
+    if (
+      (!$env is string) ||
+      $env === '' ||
+      $env === '0' ||
+      Str\lowercase($env) === 'false'
+    ) {
+      return true;
+    }
+    ShipItLogger::out("(Repository locks disabled)\n");
+    return false;
+  }
+
+  protected function getSharedLock(): IShipItLock {
     return $this->lock;
   }
 

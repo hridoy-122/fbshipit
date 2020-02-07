@@ -19,7 +19,12 @@ enum ShipItScopedFlockOperation: int as int {
   RELEASE = \LOCK_UN;
 }
 
-final class ShipItScopedFlock {
+interface IShipItLock {
+  public function getExclusive(): this;
+  public function release(): void;
+}
+
+final class ShipItScopedFlock implements IShipItLock {
   const int DEBUG_EXCLUSIVE = 1;
   const int DEBUG_SHARED = 2;
   const int DEBUG_RELEASE = 4;
