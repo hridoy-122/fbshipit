@@ -301,6 +301,16 @@ Test Plan: run all code paths',
     $changeset = (new ShipItChangeset())
       ->withSubject('Original Subject')
       ->withMessage(
+        'Summary: Closes https://github.com/facebook/fbshipit/pull/42',
+      );
+    \expect(
+      FBCommonFilters::referencePullRequestNumber($changeset)
+        ->getSubject(),
+    )->toBePHPEqual($changeset->getSubject().' (#42)');
+
+    $changeset = (new ShipItChangeset())
+      ->withSubject('Original Subject')
+      ->withMessage(
         'Pull Request resolved: https://github.com/facebook/fbshipit/pull/42',
       );
     \expect(

@@ -177,7 +177,7 @@ final class FBCommonFilters {
   ): ShipItChangeset {
     $matches = Regex\first_match(
       $changeset->getMessage(),
-      re"@^(?:Closes|Pull Request resolved:) https://github.com/.+/.+/pull/([0-9]+)@im",
+      re"@^(?:Summary: )?(?:Closes|Pull Request resolved:) https://github.com/.+/.+/pull/([0-9]+)@im",
     );
     if ($matches === null) {
       return $changeset;
