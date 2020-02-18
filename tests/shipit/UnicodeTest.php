@@ -35,7 +35,7 @@ final class UnicodeTest extends ShellTest {
   }
 
   <<__Override>>
-  public async function tearDown(): Awaitable<void> {
+  public async function tearDownAsync(): Awaitable<void> {
     /* HH_IGNORE_ERROR[2049] __PHPStdLib */
     /* HH_IGNORE_ERROR[4107] __PHPStdLib */
     \putenv('LC_CTYPE='.$this->ctype);

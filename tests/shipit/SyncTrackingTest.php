@@ -46,7 +46,7 @@ final class SyncTrackingTest extends ShellTest {
   }
 
   <<__Override>>
-  public async function tearDown(): Awaitable<void> {
+  public async function tearDownAsync(): Awaitable<void> {
     $this->tempDir?->remove();
   }
 
