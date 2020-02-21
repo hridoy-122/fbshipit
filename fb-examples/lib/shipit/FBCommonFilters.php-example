@@ -31,10 +31,10 @@ final class FBCommonFilters {
       ?'stripCommonFiles/exceptions' => vec<string>,
       ?'filterMessageSections/keepFields' => keyset<string>,
       ?'keepTags' => bool,
+      ?'referencePullRequestNumber' => bool,
     ) $config = shape('keepTags' => false),
   ): ShipItChangeset {
-    return $changeset
-      |> self::allowEmptyCommit($$)
+    $changeset = self::allowEmptyCommit($changeset)
       |> self::skipIfAlreadyOnGitHub($$)
       |> self::stripCommonFiles(
         $$,
@@ -44,9 +44,11 @@ final class FBCommonFilters {
       |> self::stripSubjectTags($$, $config['keepTags'] ?? false)
       |> self::stripEmptyTestPlans($$)
       |> self::stripCommands($$)
-      |> self::stripAccept2Ship($$)
-      |> self::referencePullRequestNumber($$)
-      |> self::stripSevRevertSummary($$)
+      |> self::stripAccept2Ship($$);
+    if ($config['referencePullRequestNumber'] ?? true) {
+      $changeset = self::referencePullRequestNumber($changeset);
+    }
+    return self::stripSevRevertSummary($changeset)
       |> self::delinkifyDifferentialURLs($$)
       |> ShipItUserFilters::rewriteSVNAuthor($$, FBToGitHubUserInfo::class)
       |> self::restoreGitHubAuthor($$)

@@ -66,6 +66,7 @@ abstract class FBShipItConfig {
           'filterMessageSections/keepFields' =>
             $this->keepMessageSectionNames(),
           'keepTags' => $this->keepTags(),
+          'referencePullRequestNumber' => $this->referencePullRequestNumber(),
         ),
       )
       |> ShipItPathFilters::stripPaths(
@@ -140,6 +141,13 @@ abstract class FBShipItConfig {
    */
   public function keepTags(): bool {
     return false;
+  }
+
+  /**
+   * Whether to reference the PR number (#1234) in the commit subject.
+   */
+  public function referencePullRequestNumber(): bool {
+    return true;
   }
 
   // Public so that you can add a unit test
