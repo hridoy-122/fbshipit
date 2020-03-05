@@ -46,7 +46,7 @@ abstract class ShipItUtil {
       if (
         Regex\matches(
           Str\trim_right($line),
-          re"@^diff --git [ab]/(.*?) [ab]/(.*?)$@",
+          re"@^diff --git \"?[ab]/(.*?)\"? \"?[ab]/(.*?)\"?$@",
         )
       ) {
         if ($contents !== '') {

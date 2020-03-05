@@ -177,15 +177,22 @@ abstract class ShipItRepo {
     /* HH_IGNORE_ERROR[2049] __PHPStdLib */
     /* HH_IGNORE_ERROR[4107] __PHPStdLib */
     \preg_match_with_matches(
-      '@^diff --git [ab]/(.*?) [ab]/(.*?)$@',
+      '@^diff --git ("?)[ab]/(.*?)"? "?[ab]/(.*?)"?$@',
       Str\trim($header),
       inout $matches,
     );
     if (C\is_empty($matches)) {
       return null;
     }
+    $path = $matches[2];
+    if ($matches[1] === '"') {
+      // Quoted paths may contain escaped characters.
+      /* HH_IGNORE_ERROR[2049] __PHPStdLib */
+      /* HH_IGNORE_ERROR[4107] __PHPStdLib */
+      $path = \stripslashes($path);
+    }
     return shape(
-      'path' => $matches[1],
+      'path' => $path,
       'body' => $body,
     );
   }

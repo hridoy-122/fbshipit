@@ -12,7 +12,7 @@
  */
 namespace Facebook\ShipIt;
 
-use namespace HH\Lib\{Str, C};
+use namespace HH\Lib\{Str, C, Vec};
 
 <<\Oncalls('open_source')>>
 final class UnusualContentTest extends BaseTest {
@@ -155,5 +155,31 @@ final class UnusualContentTest extends BaseTest {
     \expect($changeset->getMessage())->toBePHPEqual(
       "```\n# This is a code comment\n```",
     );
+  }
+
+  public function testQuotedFilenames(): void {
+    $header = \file_get_contents(
+      __DIR__.'/git-diffs/quoted-filenames.header',
+    );
+    $patch = \file_get_contents(
+      __DIR__.'/git-diffs/quoted-filenames.patch',
+    );
+    $changeset = ShipItRepoGIT::getChangesetFromExportedPatch($header, $patch);
+    $changeset = \expect($changeset)->toNotBeNull();
+    // Verify quoted paths were correctly parsed.
+    \expect(Vec\map($changeset->getDiffs(), $diff ==> $diff['path']))->toEqual(
+      vec[
+        'fbcode/hphp/test/slow/bad-this-closure-2.php.expectf',
+        'fbcode/hphp/test/slow/bad\\directory/i_am_a_very_bad\\file.php',
+        'fbcode/hphp/test/slow/bad\\directory/i_am_a_very_bad\\file.php.expect',
+      ],
+    );
+    // Verify diff body contains properly quoted and escaped path.
+    \expect($changeset->getDiffs()[2]['body'])->toContainSubstring(
+      "\n+++ \"b/fbcode/hphp/test/slow/bad\\\\directory/".
+      "i_am_a_very_bad\\\\file.php.expect\"\n",
+    );
+    // Verify exported patch preserves quoted and escaped paths.
+    \expect(ShipItRepoGIT::renderPatch($changeset))->toContainSubstring($patch);
   }
 }
