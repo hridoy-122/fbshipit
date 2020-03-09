@@ -157,6 +157,7 @@ final class FBCommonFilters {
         '@/PLATFORM$@',
         '@/\.hgsparse(-\w+)?$@',
         '@/BUCK$@', /** MOBILE DEVELOPERS: HERE BE DANGER **/
+        '@/BUCK\.\w+$@',
         '@/FBBUILD_CONFIG$@',
         '@/BUILD_MODE$@',
         '@\.bzl$@i',
