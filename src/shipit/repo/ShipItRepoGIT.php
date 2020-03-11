@@ -259,36 +259,13 @@ class ShipItRepoGIT
       "Subject: [PATCH] {$patch->getSubject()}\n\n".
       "{$message}\n---\n\n";
     foreach ($patch->getDiffs() as $diff) {
-      list($path_a, $path_b) = self::getMaybeQuotedPaths($diff);
+      $path = $diff['path'];
       $body = $diff['body'];
 
-      $ret .= "diff --git {$path_a} {$path_b}\n{$body}";
+      $ret .= "diff --git a/{$path} b/{$path}\n{$body}";
     }
     $ret .= "--\n1.7.9.5\n";
     return $ret;
-  }
-
-  /**
-   * Path may need to be quoted and escaped if it contains special characters.
-   * Instead of trying to replicate the exact correct rules that Git uses, we
-   * try to parse the path from the beginning of the diff body, where it should
-   * already be properly quoted and escaped.
-   */
-  private static function getMaybeQuotedPaths(
-    ShipItDiff $diff,
-  ): (string, string) {
-    $match = Regex\first_match(
-      $diff['body'],
-      re"@^(---|\+\+\+) (?<quote>\"?)[ab]/(?<path>.+)$@m",
-    );
-    return $match is nonnull
-      ? tuple(
-          $match['quote'].'a/'.$match['path'],
-          $match['quote'].'b/'.$match['path'],
-        )
-      // This shouldn't happen but if we somehow fail to parse the diff body,
-      // fall back to using $diff['path'] and hope it doesn't need to be quoted.
-      : tuple('a/'.$diff['path'], 'b/'.$diff['path']);
   }
 
   /**

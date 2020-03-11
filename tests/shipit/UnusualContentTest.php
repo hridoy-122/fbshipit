@@ -167,19 +167,22 @@ final class UnusualContentTest extends BaseTest {
     $changeset = ShipItRepoGIT::getChangesetFromExportedPatch($header, $patch);
     $changeset = \expect($changeset)->toNotBeNull();
     // Verify quoted paths were correctly parsed.
-    \expect(Vec\map($changeset->getDiffs(), $diff ==> $diff['path']))->toEqual(
-      vec[
-        'fbcode/hphp/test/slow/bad-this-closure-2.php.expectf',
-        'fbcode/hphp/test/slow/bad\\directory/i_am_a_very_bad\\file.php',
-        'fbcode/hphp/test/slow/bad\\directory/i_am_a_very_bad\\file.php.expect',
-      ],
+    $expected_paths = vec[
+      'fbcode/hphp/test/slow/bad-this-closure-2.php.expectf',
+      'fbcode/hphp/test/slow/bad\\directory/i_am_a_very_bad\\file.php',
+      'fbcode/hphp/test/slow/bad\\directory/i_am_a_very_bad\\file.php.expect',
+    ];
+    \expect(Vec\map($changeset->getDiffs(), $diff ==> $diff['path']))
+      ->toEqual($expected_paths);
+    // Verify paths can be correctly transformed.
+    $changeset = ShipItPathFilters::rewritePaths(
+      $changeset,
+      $path ==> Str\strip_prefix($path, 'fbcode/'),
     );
-    // Verify diff body contains properly quoted and escaped path.
-    \expect($changeset->getDiffs()[2]['body'])->toContainSubstring(
-      "\n+++ \"b/fbcode/hphp/test/slow/bad\\\\directory/".
-      "i_am_a_very_bad\\\\file.php.expect\"\n",
-    );
-    // Verify exported patch preserves quoted and escaped paths.
-    \expect(ShipItRepoGIT::renderPatch($changeset))->toContainSubstring($patch);
+    foreach ($changeset->getDiffs() as $i => $diff) {
+      $expected = Str\strip_prefix($expected_paths[$i], 'fbcode/');
+      \expect($diff['path'])->toEqual($expected);
+      \expect($diff['body'])->toContainSubstring("\n+++ b/$expected\n");
+    }
   }
 }

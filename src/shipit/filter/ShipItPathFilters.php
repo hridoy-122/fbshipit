@@ -117,14 +117,14 @@ abstract final class ShipItPathFilters {
       /* HH_IGNORE_ERROR[2049] __PHPStdLib */
       /* HH_IGNORE_ERROR[4107] __PHPStdLib */
       $body = \preg_replace(
-        '@^--- a/'.$old_path.'@m',
+        '@^--- (a/'.$old_path.'|"a/.*?"$)@m',
         '--- a/'.$new_path,
         $body,
       );
       /* HH_IGNORE_ERROR[2049] __PHPStdLib */
       /* HH_IGNORE_ERROR[4107] __PHPStdLib */
       $body = \preg_replace(
-        '@^\+\+\+ b/'.$old_path.'@m',
+        '@^\+\+\+ (b/'.$old_path.'|"b/.*?"$)@m',
         '+++ b/'.$new_path,
         $body,
       );
