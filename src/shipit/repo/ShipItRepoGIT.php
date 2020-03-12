@@ -148,6 +148,9 @@ class ShipItRepoGIT
           /* HH_IGNORE_ERROR[4107] __PHPStdLib */
           $changeset = $changeset->withTimestamp(\strtotime($value));
           break;
+        /* added due to nonexhaustive switch */
+        default:
+          break;
       }
 
     }
