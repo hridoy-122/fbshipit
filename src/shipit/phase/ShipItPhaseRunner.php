@@ -242,14 +242,7 @@ class ShipItPhaseRunner {
       Vec\map($config, $opt ==> $opt['long_name']),
     )
       |> dict($$);
-    if (
-      /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-      /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-      \array_key_exists('h', $raw_opts) ||
-      /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-        /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-        \array_key_exists('help', $raw_opts)
-    ) {
+    if (C\contains_key($raw_opts, 'h') || C\contains_key($raw_opts, 'help')) {
       self::printHelp($config);
       exit(0);
     }
@@ -289,19 +282,17 @@ class ShipItPhaseRunner {
 
       $rows[$long] = tuple($left, $description);
     }
-    $rows = Dict\sort_by_key($rows) |> new Map($$);
+    $rows = Dict\sort_by_key($rows);
 
     $help = $rows['help'];
-    $rows->removeKey('help');
+    unset($rows['help']);
     $rows = Dict\merge(dict['help' => $help], $rows);
 
     $opt_help = Str\join(
       Dict\map(
         $rows,
-        $row ==> /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-      /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-      /* HH_FIXME[4297] Exposed by upgraded typechecker (new_inference) */
-      Str\format("%s  %s\n", \str_pad($row[0], $max_left), $row[1]),
+        $row ==>
+          Str\format("%s  %s\n", Str\pad_right($row[0], $max_left), $row[1]),
       ),
       "",
     );

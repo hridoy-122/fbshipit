@@ -232,13 +232,9 @@ class ShipItRepoHG
         continue;
       }
       if ($line[0] === '#' && !$past_separator) {
-        /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-        /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-        if (!\strncasecmp($line, '# User ', 7)) {
+        if (Str\starts_with_ci($line, '# User ')) {
           $changeset = $changeset->withAuthor(Str\slice($line, 7));
-          /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-          /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-        } else if (!\strncasecmp($line, '# Date ', 7)) {
+        } else if (Str\starts_with_ci($line, '# Date ')) {
           $changeset = $changeset->withTimestamp((int)Str\slice($line, 7));
         }
         // Ignore anything else in the envelope
@@ -366,7 +362,7 @@ class ShipItRepoHG
     // Some server-side commands will inexplicitly fail, and then succeed the
     // next time they are ran.  There are a some, however, that we never want
     // to re-run because we'll lose error messages as a result.
-    switch ((new ImmVector($args))->firstValue() ?? '') {
+    switch (C\first(vec($args)) ?? '') {
       case 'patch':
         $retry_count = 0;
         break;

@@ -46,8 +46,7 @@ class ShipItRepoGIT
 
   <<__Override>>
   public function updateBranchTo(string $base_rev): void {
-    /* HH_FIXME[4276] truthiness test on string */
-    if (!$this->branch) {
+    if (Str\is_empty($this->branch)) {
       throw new ShipItRepoGITException(
         $this,
         'setBranch must be called first.',
@@ -136,9 +135,7 @@ class ShipItRepoGIT
           $changeset = $changeset->withAuthor($value);
           break;
         case 'subject':
-          /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-          /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-          if (!\strncasecmp($value, '[PATCH] ', 8)) {
+          if (Str\starts_with_ci($value, '[PATCH] ')) {
             $value = Str\trim(Str\slice($value, 8));
           }
           $changeset = $changeset->withSubject($value);

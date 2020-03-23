@@ -13,7 +13,7 @@
 
 namespace Facebook\ShipIt;
 
-use namespace HH\Lib\Str;
+use namespace HH\Lib\{Str, Vec};
 
 /**
  * Comments or uncomments specially marked lines.
@@ -96,10 +96,9 @@ final class ShipItConditionalLinesFilter {
   ): ShipItChangeset {
     $diffs = vec[];
     foreach ($changeset->getDiffs() as $diff) {
-      /* HH_IGNORE_ERROR[2049] __PHPStdLib */
-      /* HH_IGNORE_ERROR[4107] __PHPStdLib */
-      $diff['body'] = (new ImmVector(\explode("\n", $diff['body'])))
-        ->map(
+      $diff['body'] = Str\split($diff['body'], "\n")
+        |> Vec\map(
+          $$,
           /* HH_IGNORE_ERROR[2049] __PHPStdLib */
           /* HH_IGNORE_ERROR[4107] __PHPStdLib */
           $line ==> \preg_replace($pattern, $replacement, $line, /* limit */ 1),
