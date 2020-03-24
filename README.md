@@ -10,8 +10,8 @@ For example, Facebook uses it to:
  - copy commits from our monolithic Mercurial repository to
    project-specific GitHub repositories
  - populate Buck's gh-pages branch with the contents of
-  [the docs folder](https://github.com/facebook/buck/tree/master/docs)
-   in the master branch.
+   [the docs folder](https://github.com/facebook/buck/tree/master/docs)
+    in the master branch.
 
 ## Major Features
 
@@ -222,8 +222,8 @@ async function main(): Awaitable<void> {
 This will require two additional classes:
 
  - `MySourceRepoInitPhase` - clone and checkout the source repository.
-   See [`ShipItGitHubInitPhase`](https://github.com/facebook/fbshipit/blob/master/src/phase/ShipItGitHubInitPhase.php)) for an example.
- - `MyGitHubUtils` - subclass of [`ShipItGitHubUtils`](https://github.com/facebook/fbshipit/blob/master/src/ShipItGitHubUtils.php) which implements `getCredentialsForProject(string $organization, string $project)`
+   See [`ShipItGitHubInitPhase`](src/shipit/phase/ShipItGitHubInitPhase.php)) for an example.
+ - `MyGitHubUtils` - subclass of [`ShipItGitHubUtils`](src/shipit/ShipItGitHubUtils.php) which implements `getCredentialsForProject(string $organization, string $project)`
 
 ## Using With An Empty Destination Repository
 
@@ -252,16 +252,12 @@ commits it creates, so will automatically sync any new commits.
 ## Reducing Common Code With Multiple Projects
 
 We recommend splitting out common filters and phase setup to separate classes,
-and for these to be re-used between your projects. For examples from Facebook's
-usage, see:
-
- - [FBLuaLib's sync script](fb-examples/bin/shipit_fblualib.php-example)
- - [FBCommonFilters](fb-examples/lib/shipit/FBCommonFilters.php-example)
- - [FBShipItCLI](fb-examples/lib/shipit/FBShipItCLI.php-example)
+and for these to be re-used between your projects. For an example from Facebook's
+usage, see [FBCommonFilters](fb-examples/lib/shipit/FBCommonFilters.php-example)
 
 ## Further Examples
 
-The code for all public Facebook projects that use FBShipit is available in
+Some other code that might be useful for configuring FBShipIt can be found in
 [fb-examples/](https://github.com/facebook/fbshipit/tree/master/fb-examples).
 
 ## License
