@@ -11,20 +11,19 @@ on:
     branches: [ master ]
 
 jobs:
-  hhvm-latest:
+  ci:
+    strategy:
+      matrix:
+        hhvm: [latest, 4.32-latest]
     runs-on: ubuntu-latest
     container:
-      image: hhvm/hhvm:latest
+      image: hhvm/hhvm:${{ matrix.hhvm }}
     steps:
       - uses: actions/checkout@v2
-      - name: Run CI
-        run: bash .travis.sh
-
-  hhvm-4-32:
-    runs-on: ubuntu-latest
-    container:
-      image: hhvm/hhvm:4.32-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run CI
-        run: bash .travis.sh
+	name: Checkout
+      - name: Setup
+        run: bash .github/workflows/setup.sh
+      - name: Typecheck
+        run: hh_server --check .
+      - name: Run tests
+        run: vendor/bin/hacktest tests/
