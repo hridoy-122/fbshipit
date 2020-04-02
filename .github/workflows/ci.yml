@@ -20,7 +20,7 @@ jobs:
       - name: Run CI
         run: bash .travis.sh
 
-  hhvm-4.32:
+  hhvm-4-32:
     runs-on: ubuntu-latest
     container:
       image: hhvm/hhvm:4.32-latest
