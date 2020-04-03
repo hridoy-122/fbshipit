@@ -16,7 +16,7 @@ class Oncalls implements HH\ClassAttribute, HH\MethodAttribute, HH\TypeAliasAttr
 class DataProvider implements HH\MethodAttribute {
   public function __construct(
     public string $provider,
-  ) {
+  ) {}
 }
 
 class TestsBypassVisibility implements HH\ClassAttribute, HH\MethodAttribute, HH\TypeAliasAttribute,
