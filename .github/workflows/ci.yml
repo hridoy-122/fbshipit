@@ -20,7 +20,6 @@ jobs:
       image: hhvm/hhvm:${{ matrix.hhvm }}
     steps:
       - uses: actions/checkout@v2
-	name: Checkout
       - name: Setup
         run: bash .github/workflows/setup.sh
       - name: Typecheck
