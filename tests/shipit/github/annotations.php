@@ -13,7 +13,11 @@ class Oncalls implements HH\ClassAttribute, HH\MethodAttribute, HH\TypeAliasAttr
   public function __construct(mixed ...$args) {}
 }
 
-class DataProvider extends Facebook\HackTest\DataProvider {}
+class DataProvider implements HH\MethodAttribute {
+  public function __construct(
+    public string $provider,
+  ) {
+}
 
 class TestsBypassVisibility implements HH\ClassAttribute, HH\MethodAttribute, HH\TypeAliasAttribute,
     HH\EnumAttribute, HH\FunctionAttribute {
