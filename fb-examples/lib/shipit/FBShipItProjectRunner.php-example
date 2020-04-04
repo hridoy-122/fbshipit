@@ -118,7 +118,7 @@ final class FBShipItProjectRunner extends ShipItPhaseRunner {
     }
   }
 
-  private function lookupConfigClass(string $name): FBShipItConfig {
+  public function lookupConfigClass(string $name): FBShipItConfig {
     // owner/reponame
     $split = Str\split($name, '/');
     if (C\count($split) === 2) {
