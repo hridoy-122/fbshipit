@@ -13,6 +13,8 @@
 namespace Facebook\ShipIt;
 
 use namespace HH\Lib\{Keyset, Vec};
+use type Facebook\HackTest\DataProvider; // @oss-enable
+// @oss-disable: use type DataProvider;
 
 <<\Oncalls('open_source')>>
 final class PathFiltersTest extends BaseTest {
@@ -60,7 +62,7 @@ final class PathFiltersTest extends BaseTest {
     ];
   }
 
-  <<\DataProvider('stripPathsTestData')>>
+  <<DataProvider('stripPathsTestData')>>
   public function testStripPaths(
     vec<string> $patterns,
     vec<string> $exceptions,
@@ -133,7 +135,7 @@ final class PathFiltersTest extends BaseTest {
     ];
   }
 
-  <<\DataProvider('examplesForMoveDirectories')>>
+  <<DataProvider('examplesForMoveDirectories')>>
   public function testMoveDirectories(
     dict<string, string> $map,
     vec<string> $in,
@@ -167,7 +169,7 @@ final class PathFiltersTest extends BaseTest {
     ];
   }
 
-  <<\DataProvider('examplesForStripExceptDirectories')>>
+  <<DataProvider('examplesForStripExceptDirectories')>>
   public function testStripExceptDirectories(
     keyset<string> $roots,
     vec<string> $paths_in,

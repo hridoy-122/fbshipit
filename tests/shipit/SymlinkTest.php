@@ -13,6 +13,8 @@
 namespace Facebook\ShipIt;
 
 use namespace HH\Lib\{C, Vec};
+use type Facebook\HackTest\DataProvider; // @oss-enable
+// @oss-disable: use type DataProvider;
 
 
 enum SymlinkTestOperation: string {
@@ -103,7 +105,7 @@ final class SymlinkTest extends ShellTest {
    * 2. create the new thing
    *
    */
-  <<\DataProvider('getFileToFromSymlinkExamples')>>
+  <<DataProvider('getFileToFromSymlinkExamples')>>
   public function testFileToFromSymlink(
     classname<ShipItSourceRepo> $repo_type,
     vec<vec<string>> $steps,

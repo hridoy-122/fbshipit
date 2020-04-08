@@ -13,6 +13,8 @@
 namespace Facebook\ShipIt;
 
 use namespace HH\Lib\Vec;
+use type Facebook\HackTest\DataProvider; // @oss-enable
+// @oss-disable: use type DataProvider;
 
 
 <<\Oncalls('open_source')>>
@@ -27,7 +29,7 @@ final class PathsWithSpacesTest extends ShellTest {
     ];
   }
 
-  <<\DataProvider('exampleRepos')>>
+  <<DataProvider('exampleRepos')>>
   public function testPathWithSpace(ShipItTempDir $temp_dir): void {
     $repo = ShipItRepo::open($temp_dir->getPath(), '.');
     $head = $repo->getHeadChangeset();

@@ -13,6 +13,8 @@
 namespace Facebook\ShipIt;
 
 use namespace HH\Lib\{C};
+use type Facebook\HackTest\DataProvider; // @oss-enable
+// @oss-disable: use type DataProvider;
 
 <<\Oncalls('open_source')>>
 final class ConditionalLinesFilterTest extends BaseTest {
@@ -67,7 +69,7 @@ final class ConditionalLinesFilterTest extends BaseTest {
     ];
   }
 
-  <<\DataProvider('testFilesProvider')>>
+  <<DataProvider('testFilesProvider')>>
   public function testUncommentLines(
     string $name,
     string $comment_start,

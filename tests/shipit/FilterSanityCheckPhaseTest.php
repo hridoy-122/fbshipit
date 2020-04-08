@@ -13,6 +13,8 @@
 namespace Facebook\ShipIt;
 
 use namespace HH\Lib\{Str, Vec};
+use type Facebook\HackTest\DataProvider; // @oss-enable
+// @oss-disable: use type DataProvider;
 
 
 <<\Oncalls('open_source')>>
@@ -40,7 +42,7 @@ final class FilterSanityCheckPhaseTest extends BaseTest {
     ];
   }
 
-  <<\DataProvider('exampleEmptyRoots')>>
+  <<DataProvider('exampleEmptyRoots')>>
   public function testAllowsIdentityFunctionForEmptyRoots(
     keyset<string> $roots,
   ): void {
