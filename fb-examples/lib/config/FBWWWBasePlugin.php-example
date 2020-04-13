@@ -93,7 +93,13 @@ abstract class FBWWWBasePlugin extends FBShipItConfigeratorConfig {
             return $result;
           },
         )
-        |> Str\join($$, "\n");
+        |> Str\join($$, "\n")
+        /* Special-case (HHVM builtin).
+         *
+         * Not just whitelisting in renameAsyncToGen in case we add a public
+         * version to the OS namespace later, which *should* be renamed.
+         */
+        |> Str\replace($$, '_OS\\gen_poll', '_OS\\poll_async');
       $diffs[] = $diff;
     }
     return $changeset->withDiffs($diffs);
